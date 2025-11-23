@@ -1,110 +1,251 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Calendário Fevereiro 2026</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #fff;
-        padding: 30px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário de Aniversário - Fevereiro 2026</title>
+    <!-- Carrega o Tailwind CSS para estilização rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define a fonte Inter como padrão para uma aparência moderna */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f0; /* Fundo claro para contrastar com o widget */
+        }
+        /* Definições de cor baseadas na imagem de inspiração */
+        .calendar-bg {
+            background-color: #ffffff; /* Fundo principal branco/claro */
+        }
+        .header-bg {
+            background-color: #efe8de; /* Fundo bege claro do cabeçalho */
+            /* A borda inferior foi removida para simplificar o design */
+        }
+        .accent-color {
+            color: #887171; /* Cor de acento escura (marrom) */
+        }
+        .accent-bg {
+            background-color: #ddbbba; /* Cor de acento escura para botões/destaques */
+        }
+        .grid-item {
+            /* Estilo da célula da data */
+            transition: transform 0.1s ease-in-out;
+            cursor: pointer;
+            position: relative; /* Para o tooltip */
+            /* Reduzindo a altura entre os números (padding p-2 original reduzido para p-1.5) */
+            padding-top: 0.375rem; /* p-1.5 */
+            padding-bottom: 0.375rem; /* p-1.5 */
+        }
+        .grid-item:hover {
+            /* Fundo transparente, sem sombreamento e sem transform scale */
+            background-color: transparent; 
+        }
+        /* Estilo do Tooltip/Contador */
+        .tooltip-countdown {
+            pointer-events: none; /* Não interfere com o hover da célula */
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        /* O tooltip só aparece quando o hover ocorre no dia 25 */
+        #day-25:hover .tooltip-countdown {
+            opacity: 1; /* Mostra o tooltip no hover */
+        }
 
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
-
-    .subtext {
-        font-size: 14px;
-        font-weight: normal;
-        margin-top: 4px;
-    }
-
-    #clock {
-        font-size: 18px;
-        font-weight: bold;
-        padding: 6px 12px;
-        border: 2px solid #000;
-        border-radius: 6px;
-    }
-
-    table {
-        width: 350px;
-        border-collapse: collapse;
-        text-align: center;
-        font-size: 18px;
-    }
-
-    th {
-        padding: 8px 0;
-        background: #eee;
-    }
-
-    td {
-        padding: 10px 0;
-        border: 1px solid #ddd;
-    }
-
-    .highlight {
-        color: red;
-        font-weight: bold;
-    }
-</style>
+        /* Classe para a borda externa mais grossa */
+        .thick-border {
+            border-width: 4px; /* Aumenta a espessura da borda */
+        }
+    </style>
+    <!-- Configuração do Tailwind para usar a fonte Inter -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="flex items-center justify-center min-h-screen p-4">
 
-<div class="header">
-    <div>
-        Vitória's Birthday!<br>
-        <span class="subtext">Reminder: Vitória Birthday on Feb 25!</span>
+    <!-- Container Principal do Calendário -->
+    <!-- Borda mais grossa (thick-border) e remoção de sombra (shadow-none) e hover scale -->
+    <div id="calendar-widget" class="calendar-bg w-full max-w-sm rounded-xl overflow-hidden thick-border border-[#858585] shadow-none">
+        
+        <!-- Cabeçalho (Header) -->
+        <div class="header-bg p-4 flex justify-between items-center rounded-t-lg">
+            
+            <!-- Bloco do Título (Ícone e Nomes) -->
+            <div class="flex items-start space-x-3">
+                
+                <div class="flex flex-col items-center">
+                    <!-- Ícone do Calendário -->
+                    <svg class="w-6 h-6 accent-color" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                
+                <div>
+                    <!-- "Aniversário!" na mesma linha do ícone -->
+                    <h2 class="text-lg font-bold accent-color leading-none">Vitória's Birthday!</h2>
+                    <!-- "Fevereiro de 2026" abaixo do ícone (mantendo a coluna) -->
+                    <p class="text-sm accent-color leading-none">Reminder: Vitória's birthday on Feb 25!</p>
+                </div>
+            </div>
+            
+            <!-- Relógio e Lembrete (Reorganizado) -->
+            <div class="flex flex-col items-end space-y-1">
+                <!-- Ícone do Relógio no topo -->
+                <svg class="w-5 h-5 accent-color" fill="none" stroke="currentColor" viewBox="0 0 19 25" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <!-- O horário será atualizado por JS (Contagem acima do calendário) -->
+                <span id="current-time" class="accent-bg text-white text-sm font-semibold px-3 py-1 rounded-full">12:00</span>
+            </div>
+        </div>
+        
+        <!-- O lembrete fixo foi removido conforme solicitado -->
+
+        <!-- Grade do Calendário -->
+        <div class="p-4 pt-2">
+            
+            <!-- Dias da Semana -->
+            <div class="grid grid-cols-7 text-center font-bold text-sm text-gray-500 mb-1">
+                <span>D</span> <!-- Domingo -->
+                <span>S</span> <!-- Segunda -->
+                <span>T</span> <!-- Terça -->
+                <span>Q</span> <!-- Quarta -->
+                <span>Q</span> <!-- Quinta -->
+                <span>S</span> <!-- Sexta -->
+                <span>S</span> <!-- Sábado -->
+            </div>
+
+            <!-- Datas do Mês (Fevereiro 2026) -->
+            <!-- 1 de Fev 2026 é um Domingo, então o grid começa direto. -->
+            <div id="calendar-grid" class="grid grid-cols-7 text-center text-lg text-gray-900 gap-1">
+                
+                <script>
+                    // Dados do calendário: Fevereiro de 2026 tem 28 dias
+                    const daysInFeb = 28;
+                    const targetDay = 25; // O dia do aniversário
+                    const grid = document.getElementById('calendar-grid');
+
+                    for (let i = 1; i <= daysInFeb; i++) {
+                        const dayElement = document.createElement('div');
+                        // Usando 'p-1.5' para diminuir a altura entre os números (ver style)
+                        dayElement.classList.add('grid-item', 'p-1.5', 'rounded-lg'); 
+                        dayElement.setAttribute('data-day', i);
+                        
+                        let dayClass = 'text-gray-900';
+                        
+                        if (i === targetDay) {
+                            // Dia 25: Apenas a cor vermelha, sem bg-red-100 ou ring-2
+                            dayClass = 'text-red-600 font-extrabold text-xl scale-100'; 
+                            dayElement.id = 'day-25'; // Adiciona ID para o hover exclusivo
+                        }
+                        
+                        dayElement.innerHTML = `
+                            <span class="${dayClass}">${i}</span>
+                            <!-- Tooltip que aparece no hover (invisível por padrão) -->
+                            <div class="tooltip-countdown absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[120%] 
+                                         bg-gray-800 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap 
+                                         shadow-lg">
+                                <!-- O texto será preenchido por JS no hover, apenas para o dia 25 -->
+                            </div>
+                        `;
+                        
+                        grid.appendChild(dayElement);
+                    }
+                </script>
+            </div>
+        </div>
+
+        <!-- O rodapé fixo foi removido conforme solicitado -->
+
     </div>
-    <div id="clock">00:00:00</div>
-</div>
 
-<table>
-    <tr>
-        <th>Dom</th>
-        <th>Seg</th>
-        <th>Ter</th>
-        <th>Qua</th>
-        <th>Qui</th>
-        <th>Sex</th>
-        <th>Sáb</th>
-    </tr>
-    <tr>
-        <td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td>
-    </tr>
-    <tr>
-        <td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td>
-    </tr>
-    <tr>
-        <td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td>
-    </tr>
-    <tr>
-        <td>21</td><td>22</td><td>23</td><td>24</td>
-        <td class="highlight">25</td>
-        <td>26</td><td>27</td>
-    </tr>
-    <tr>
-        <td>28</td><td></td><td></td><td></td><td></td><td></td><td></td>
-    </tr>
-</table>
+    <script>
+        // Data alvo: 25 de Fevereiro de 2026, à meia-noite
+        const TARGET_DATE = new Date('2026-02-25T00:00:00');
+        const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
-<script>
-    function updateClock() {
-        const clock = document.getElementById("clock");
-        const now = new Date();
-        clock.textContent = now.toLocaleTimeString("pt-BR");
-    }
+        /**
+         * Calcula a diferença de dias entre a data atual e a data alvo.
+         * @returns {number} O número de dias restantes.
+         */
+        function calculateDaysRemaining() {
+            const today = new Date();
+            // Zerar o horário de hoje para garantir que a contagem seja de "dias completos"
+            today.setHours(0, 0, 0, 0); 
+            
+            // Certifica-se de que a data alvo também está zerada
+            const target = new Date(TARGET_DATE);
+            target.setHours(0, 0, 0, 0);
 
-    setInterval(updateClock, 1000);
-    updateClock();
-</script>
+            const differenceInTime = target.getTime() - today.getTime();
 
+            // Se já passou, ou é hoje, retorna a diferença em dias (pode ser negativo)
+            return Math.ceil(differenceInTime / MS_PER_DAY);
+        }
+
+        /**
+         * Atualiza o relógio no canto superior direito.
+         */
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('current-time').textContent = timeString;
+        }
+
+        /**
+         * Inicializa os event listeners para o hover, especificamente no dia 25.
+         */
+        function initializeHoverEffects() {
+            const day25Cell = document.getElementById('day-25');
+            // Se o dia 25 existe
+            if (day25Cell) {
+                const tooltip = day25Cell.querySelector('.tooltip-countdown');
+                const daysRemaining = calculateDaysRemaining();
+                
+                let tooltipText = '';
+
+                if (daysRemaining > 0) {
+                    tooltipText = `Faltam ${daysRemaining} dias!`;
+                } else if (daysRemaining === 0) {
+                    tooltipText = 'É HOJE! Feliz Aniversário!';
+                } else {
+                    // Contagem negativa ou data já passou
+                    tooltipText = `Aniversário já passou.`;
+                }
+                
+                // Preenche o texto do tooltip
+                tooltip.textContent = tooltipText;
+
+                // Remove o tooltip de todas as outras células, garantindo exclusividade
+                document.querySelectorAll('.grid-item').forEach(cell => {
+                    if (cell.id !== 'day-25') {
+                        const otherTooltip = cell.querySelector('.tooltip-countdown');
+                        if (otherTooltip) {
+                            otherTooltip.remove();
+                        }
+                        // Opcional: Para evitar a cor de hover nas outras células
+                        cell.classList.remove('hover:shadow-md'); 
+                    }
+                });
+            }
+        }
+
+
+        // 1. Inicializa o relógio e configura a atualização a cada minuto
+        updateClock();
+        setInterval(updateClock, 60000); // Atualiza a cada 60 segundos (1 minuto)
+
+        // 2. Inicializa os efeitos de hover (contagem regressiva)
+        initializeHoverEffects();
+        
+    </script>
 </body>
 </html>
